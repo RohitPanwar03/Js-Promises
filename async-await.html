@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Async-Await</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Outermost container -->
+    <div class="container">
+
+        <!-- Api calling button -->
+        <button onclick="handleAsyncdata()" class="btn">Click me!</button>
+
+        <!-- Data storing Container -->
+        <div class="data-container">
+
+            <!-- Post Title -->
+            <h3 class="post-title"></h3>
+
+            <!-- Post Body -->
+            <p class="post-body"></p>
+        </div>
+
+    </div>
+
+    <script>
+
+        const title = document.querySelector(".post-title");
+        const body = document.querySelector(".post-body");
+        const container = document.querySelector(".data-container")
+
+        // Api calling function
+
+        async function handleAsyncdata() {
+
+            // Making container visible when button is clicked
+            // Also setting style when data is loading
+
+            container.style.display = "block"
+            body.innerHTML = "Loading..."
+            body.style.display = "flex"
+            body.style.alignItems = "center"
+            body.style.justifyContent = "center"
+            body.style.fontSize = "25px"
+
+            // Api Url
+            const url = "https://dummyjson.com/posts";
+
+            // Try Catch Block to catch error while data failed to load
+            try {
+
+                const res = await fetch(url);
+                const data = await res.json();
+
+                // Fetching data Title and description
+
+                title.innerText = `${data.posts[2].title}`;
+                body.innerText = `${data.posts[2].body}`;
+                body.style = "reset"
+
+            } catch (error) {
+
+                // Error message and Styling while failed to load data
+
+                body.innerText = `Failed to Load Data...`
+                body.style.color = "red"
+                body.style.display = "flex"
+                body.style.alignItems = "center"
+                body.style.justifyContent = "center"
+                body.style.fontSize = "25px"
+                body.style.fontWeight = "700"
+            }
+        }
+
+
+    </script>
+</body>
+
+</html>

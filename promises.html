@@ -1,0 +1,98 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Promises</title>
+    <link rel="stylesheet" href="style.css">
+</head>
+
+<body>
+
+    <!-- Outermost container -->
+    <div class="container">
+
+        <!-- Api calling button -->
+        <button onclick="handlepromisecall()" class="btn">Click me!</button>
+
+        <!-- Data storing Container -->
+        <div class="data-container">
+
+            <!-- Post Title -->
+            <h3 class="post-title"></h3>
+
+            <!-- Post Body -->
+            <p class="post-body"></p>
+        </div>
+
+    </div>
+
+
+    <script>
+
+        const title = document.querySelector(".post-title");
+        const body = document.querySelector(".post-body");
+        const container = document.querySelector(".data-container")
+
+
+        // Api calling function
+        function handlepromisecall() {
+
+            // Making container visible when button is clicked
+            // Also setting style when data is loading
+
+            container.style.display = "block"
+            body.innerHTML = "Loading..."
+            body.style.display = "flex"
+            body.style.alignItems = "center"
+            body.style.justifyContent = "center"
+            body.style.fontSize = "25px"
+
+            // Using Promise to call Api
+            let myPromise = new Promise(function (myResolve, myReject) {
+
+                // DATA URL
+
+                const url = "https://dummyjson.com/posts";
+
+                // Fetching Data
+
+                fetch(url)
+                    .then((res) => res.json())
+                    .then((data) => {
+                        if (data) {
+                            myResolve(data) // when successful
+                        }
+                    }
+                    )
+                    .catch((error) => myReject(error) // when Rejected
+                    )
+            });
+
+            myPromise.then((data) => {
+
+                // Fetching data title and description 
+
+                title.innerText = `${data.posts[1].title}`;
+                body.innerText = `${data.posts[1].body}`;
+                body.style = "reset"
+            })
+            myPromise.catch((error) => {
+
+                // Body text and Style when error in loading data
+
+                body.innerText = `Failed to Load Data...`
+                body.style.color = "red"
+                body.style.display = "flex"
+                body.style.alignItems = "center"
+                body.style.justifyContent = "center"
+                body.style.fontSize = "25px"
+                body.style.fontWeight = "700"
+            })
+
+        }
+    </script>
+</body>
+
+</html>
